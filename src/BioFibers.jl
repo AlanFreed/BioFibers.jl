@@ -1,49 +1,3 @@
-#=
-Created on Thu 08 Oct 2020
-Updated on Thu 24 Nov 2022
--------------------------------------------------------------------------------
-This software, like the language it is written in, is published under the MIT
-License, https://opensource.org/licenses/MIT.
-
-Copyright (c) 2020-2022:
-Alan Freed, Sandipan Paul, Shahla Zamani and John Clayton
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-=#
-# -----------------------------------------------------------------------------
-"""
-Module\n
-    BioFibers\n
-This module provides the base data structures for thermoelastic, biologic, fiber models; specifically, ElasticBioFiber, ViscoelasticBioFiber and AlveolarChord.\n
-Type:\n
-    BioFiber\n
-Methods:\n
-    copy\n
-    deepcopy\n
-    toString\n
-Type:\n
-    AlveolarChord\n
-Methods:\n
-    newAlveolarChord\n
-    copy\n
-    deepcopy\n
-    toString\n
-"""
 module BioFibers
 
 using
@@ -422,10 +376,10 @@ function _collagen(Lᵣ, L₀::PhyScalar)::BioFiber
     ϵ₀ = newScalar(DIMENSIONLESS)
     set!(ϵ₀, log(L₀/Lᵣ))
     Eᵣ = newScalar(MODULUS)  # modulus in reference configuration
-    set!(Eᵣ, 1.5e8)
+    set!(Eᵣ, 5.0e7)          # the reference modulus for collagen
     σ₀ = σᵣ + Eᵣ * ϵ₀
     # Assume an isothermal elastic response from κᵣ → κ₀.
-    θ₀ = θᵣ
+    θ₀ = deepcopy(θᵣ)
     η₀ = ηᵣ + α * (σ₀ - σᵣ) / ρ
 
     # Create a collagen fiber using these material parameters.
@@ -509,10 +463,10 @@ function _elastin(Lᵣ, L₀::PhyScalar)::BioFiber
     ϵ₀ = newScalar(DIMENSIONLESS)
     set!(ϵ₀, log(L₀/Lᵣ))
     Eᵣ = newScalar(MODULUS)  # modulus in reference configuration
-    set!(Eᵣ, 1.0e6)
+    set!(Eᵣ, 1.6e6)          # the rubbery modulus for elastin
     σ₀ = σᵣ + Eᵣ * ϵ₀
     # Assume an isothermal elastic response from κᵣ → κ₀.
-    θ₀ = θᵣ
+    θ₀ = deepcopy(θᵣ)
     η₀ = ηᵣ + α * (σ₀ - σᵣ) / ρ
 
     # Create an elastin fiber using these material parameters.
