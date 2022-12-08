@@ -318,7 +318,7 @@ function _collagen(Lᵣ, L₀::PhyScalar)::BioFiber
 
     # Thermal properties include a thermal strain in 1/°C of
     α = newScalar(THERMALSTRAIN)
-    set!(α, 0.056)
+    set!(α, 0.001)
     # and a specific heat at constant pressure of
     cₚ = newScalar(ENTROPYperUnitMASS)
     set!(cₚ, 1.7e7)
@@ -405,7 +405,7 @@ function _elastin(Lᵣ, L₀::PhyScalar)::BioFiber
 
     # Thermal properties include a thermal strain in 1/°C of
     α = newScalar(THERMALSTRAIN)
-    set!(α, 0.1)
+    set!(α, 0.003)
     # and a specific heat at constant pressure of
     cₚ = newScalar(ENTROPYperUnitMASS)
     set!(cₚ, 4.2e7)
