@@ -39,12 +39,14 @@ export
     # types
     BioFiber,
     AlveolarChord,
+    # constructors
+    newCollagenFiber,
+    newElastinFiber,
+    newAlveolarChord,
     # methods
     copy,
     deepcopy,
-    toString,
-    # function
-    newAlveolarChord
+    toString
 
 const THERMALSTRAIN = CGS(0, 0, 0, -1)
 
@@ -297,9 +299,14 @@ function toString(ac::AlveolarChord;
     return s
 end
 
-# functions
+# constructors
 
-function _collagen(Lᵣ, L₀::PhyScalar)::BioFiber
+"""
+    newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
+
+Creates a new instance of type BioFiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
+"""
+function newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     # The fiber is originally intact.
     ruptured = MBool(false)
 
@@ -384,9 +391,14 @@ function _collagen(Lᵣ, L₀::PhyScalar)::BioFiber
 
     # Create a collagen fiber using these material parameters.
     return BioFiber(ruptured, ϵf, ρ, α, cₚ, Lᵣ, Aᵣ, θᵣ, σᵣ, ηᵣ, ϵᵣ, L₀, A₀, θ₀, σ₀, η₀, ϵ₀)
-end # _collagen
+end # newCollagenFiber
 
-function _elastin(Lᵣ, L₀::PhyScalar)::BioFiber
+"""
+    newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
+
+Creates a new instance of type BioFiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
+"""
+function newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     # The fiber is originally intact.
     ruptured = MBool(false)
 
@@ -471,7 +483,7 @@ function _elastin(Lᵣ, L₀::PhyScalar)::BioFiber
 
     # Create an elastin fiber using these material parameters.
     return BioFiber(ruptured, ϵf, ρ, α, cₚ, Lᵣ, Aᵣ, θᵣ, σᵣ, ηᵣ, ϵᵣ, L₀, A₀, θ₀, σ₀, η₀, ϵ₀)
-end # _elastin
+end # newElastinFiber
 
 """
     newAlveolarChord(Lᵣ, L₀::PhyScalar)::AlveolarChord
@@ -496,8 +508,8 @@ function newAlveolarChord(Lᵣ, L₀::PhyScalar)::AlveolarChord
         L₀ = Lᵣ
     end
     # Create the fibers comprising the chord.
-    fᶜ = _collagen(Lᵣ, L₀)
-    fᵉ = _elastin(Lᵣ, L₀)
+    fᶜ = newCollagenFiber(Lᵣ, L₀)
+    fᵉ = newElastinFiber(Lᵣ, L₀)
 
     # structural property of the chord:
     ruptured = MBool(false)
