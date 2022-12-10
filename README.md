@@ -14,12 +14,20 @@ Pkg.add(url = "https://github.com/AlanFreed/PhysicalFields.jl")
 Pkg.add(url = "https://github.com/AlanFreed/PhysicalScalars.jl")
 ```
 
+## Fiber
+
+Abstract type `Fiber` is the root type of all fiber types.
+
+```
+abstract type Fiber end
+```
+
 ## BioFiber
 
 Type `BioFiber` holds the physical data that describes a generic biologic fiber.
 
 ```
-struct BioFiber
+struct BioFiber <: Fiber
     # structural property
     ruptured::MBool       # specifies if fiber has ruptured, or not
 
@@ -82,16 +90,23 @@ function toString(f::BioFiber;
 ```
 where the keyword `format` is a character that, whenever its value is 'E' or 'e', will represent scalar fields in scientific notation; otherwise, they will be represented in fixed-point notation. Keyword `precision` specifies the number of significant digits to be shown, which can accept values from the set \{3…7\}. Keyword `aligned`, when set to `true`, will add a white space in front of any non-negative scalar string representation, e.g., this could be useful when printing out a matrix of scalars; otherwise, there is no leading white space in its string representation, which is the default.
 
+## Chord
+
+Abstract type `Chord` is the root type for all chords. A chord is a mixture of fibers.
+
+```
+abstract type Chord end
+```
 
 ## AlveolarChord
 
 Alveolar chords are comprised of collagen and elastin fibers loaded in parallel with weak mechanical coupling between them. Type `AlveolarChord` holds the physical data that describes a generic alveolar chord.
 
 ```
-struct AlveolarChord
+struct AlveolarChord <: Chord
     # fibers of the chord
-    fᶜ::BioFiber          # collagen fiber in the alveolar chord
-    fᵉ::BioFiber          # elastin  fiber in the alveolar chord
+    fᶜ::Fiber             # collagen fiber in the alveolar chord
+    fᵉ::Fiber             # elastin  fiber in the alveolar chord
 
     # structural property
     ruptured::MBool       # specifies if fiber has ruptured, or not
