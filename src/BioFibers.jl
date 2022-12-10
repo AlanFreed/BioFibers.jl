@@ -36,7 +36,10 @@ import
         log
 
 export
-    # types
+    # abstract types
+    Fiber,
+    Chord,
+    # concrete types
     BioFiber,
     AlveolarChord,
     # constructors
@@ -50,7 +53,9 @@ export
 
 const THERMALSTRAIN = CGS(0, 0, 0, -1)
 
-struct BioFiber
+abstract type Fiber end
+
+struct BioFiber <: Fiber
     # structural property
     ruptured::MBool  # specifies if fiber has ruptured, or not
 
@@ -91,10 +96,12 @@ struct BioFiber
     ϵ₀::PhyScalar    # initial strain
 end # BioFiber
 
-struct AlveolarChord
+abstract type Chord end
+
+struct AlveolarChord <: Chord
     # fibers of the chord
-    fᶜ::BioFiber     # collagen fiber in the alveolar chord
-    fᵉ::BioFiber     # elastin  fiber in the alveolar chord
+    fᶜ::Fiber        # collagen fiber in the alveolar chord
+    fᵉ::Fiber        # elastin  fiber in the alveolar chord
 
     # structural property
     ruptured::MBool  # specifies if fiber has ruptured, or not
@@ -304,7 +311,7 @@ end
 """
     newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
 
-Creates a new instance of type BioFiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
+Creates a new instance of type `BioFiber` suitable for modeling a collagen fiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
 """
 function newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     # The fiber is originally intact.
@@ -396,7 +403,7 @@ end # newCollagenFiber
 """
     newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
 
-Creates a new instance of type BioFiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
+Creates a new instance of type `BioFiber` suitable for modeling an elastin fiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
 """
 function newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     # The fiber is originally intact.
