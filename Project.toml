@@ -1,7 +1,7 @@
 name = "BioFibers"
 uuid = "de07a865-98b8-42a0-95a3-98c4b500e375"
 authors = ["Alan Freed <alan.d.freed@proton.me>"]
-version = "0.1.2"
+version = "0.1.3"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"

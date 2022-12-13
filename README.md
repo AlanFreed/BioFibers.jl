@@ -166,15 +166,15 @@ function toString(ac::AlveolarChord;
 ```
 where the keyword `format` is a character that, whenever its value is 'E' or 'e', will represents scalars in scientific notation; otherwise, they will be represented in fixed-point notation. Keyword `precision` specifies the number of significant digits to be shown, which can accept values from the set \{3…7\}. Keyword `aligned`, when set to `true`, will add a white space in front of any non-negative scalar string representation, e.g., this could be useful when printing out a matrix of scalars; otherwise, there is no leading white space in its string representation, which is the default.
 
-### Consturctors
+### Constructors
 
-To create a new instance of type `BioFiber` for a collagen fiber in an alveolar chord:
+To create a new instance of type `BioFiber` for modeling a collagen fiber in an alveolar chord:
 ```
 function newCollagenFiber(Lᵣ::PhysicalScalar, L₀::PhysicalScalar)::BioFiber
 ```
 where `Lᵣ` is its length in the reference (strain-free) configuration κᵣ, while `L₀` is its length in an initial configuration κ₀ of analysis, which is typically distinct from κᵣ.
 
-To create a new instance of type `BioFiber` for an elastin fiber in an alveolar chord:
+To create a new instance of type `BioFiber` for modeling an elastin fiber in an alveolar chord:
 ```
 function newElastinFiber(Lᵣ::PhysicalScalar, L₀::PhysicalScalar)::BioFiber
 ```
@@ -185,3 +185,5 @@ To create a new instance of type `AlveolarChord`:
 function newAlveolarChord(Lᵣ::PhysicalScalar, L₀::PhysicalScalar)::AlveolarChord
 ```
 where `Lᵣ` is its chordal length in the reference (strain-free) configuration κᵣ, while `L₀` is its chordal length in an initial configuration κ₀ of analysis, which is typically distinct from κᵣ.
+
+These constructors will adjust `Lᵣ`, if necessary, to ensure that `Lᵣ` ≤ `L₀` so that these fibers cannot support negative strains in their initial configuration κ₀.
