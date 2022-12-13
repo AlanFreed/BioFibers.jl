@@ -309,11 +309,11 @@ end
 # constructors
 
 """
-    newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
+    newCollagenFiber(Lᵣ::PhysicalScalar, L₀::PhysicalScalar)::BioFiber
 
-Creates a new instance of type `BioFiber` suitable for modeling a collagen fiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
+Creates a new instance of type `BioFiber` suitable for modeling a collagen fiber in an alveolar chord. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀, is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
 """
-function newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
+function newCollagenFiber(Lᵣ::PhyScalar, L₀::PhyScalar)::BioFiber
     # The fiber is originally intact.
     ruptured = MBool(false)
 
@@ -338,6 +338,11 @@ function newCollagenFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     set!(cₚ, 1.7e7)
 
     # Properties pertaining to the reference configuration κᵣ.
+
+    # Ensure the fiber is a tension-only structure.
+    if Lᵣ > L₀
+        Lᵣ = L₀
+    end
 
     # Fiber diameter is a random value drawn from a statisitcal distribution.
     # Statistics from: Sobin, Fung and Tremer, J. Appl. Phys., Vol. 64, 1988.
@@ -403,7 +408,7 @@ end # newCollagenFiber
 """
     newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
 
-Creates a new instance of type `BioFiber` suitable for modeling an elastin fiber. The first argument, Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
+Creates a new instance of type `BioFiber` suitable for modeling an elastin fiber. The first argument, i.e., Lᵣ, is the length of the fiber in its reference configuration κᵣ, and the second argument, viz., L₀, is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
 """
 function newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     # The fiber is originally intact.
@@ -430,6 +435,11 @@ function newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
     set!(cₚ, 4.2e7)
 
     # Properties pertaining to the reference configuration κᵣ.
+
+    # Ensure the fiber is a tension-only structure.
+    if Lᵣ > L₀
+        Lᵣ = L₀
+    end
 
     # Fiber diameter is a random value drawn from a statisitcal distribution.
     # Statistics from: Sobin, Fung and Tremer, J. Appl. Phys., Vol. 64, 1988.
@@ -493,11 +503,11 @@ function newElastinFiber(Lᵣ, L₀::PhyScalar)::BioFiber
 end # newElastinFiber
 
 """
-    newAlveolarChord(Lᵣ, L₀::PhyScalar)::AlveolarChord
+    newAlveolarChord(Lᵣ::PhysicalScalar, L₀::PhysicalScalar::AlveolarChord
 
-Creates a new instance of type AlveolarChord.  The first argument, Lᵣ, is the length of the chord in its reference configuration κᵣ, and the second argument, L₀ (L₀ ≥ Lᵣ), is its length in the initial configuration κ₀.  To the extent possible, parametric values are assigned values via distributions.
+Creates a new instance of type AlveolarChord. The first argument, i.e., Lᵣ, is the length of the chord in its reference configuration κᵣ, and the second argument, viz., L₀, is its length in the initial configuration κ₀. To the extent possible, parametric values are assigned values via distributions.
 """
-function newAlveolarChord(Lᵣ, L₀::PhyScalar)::AlveolarChord
+function newAlveolarChord(Lᵣ::PhyScalar), L₀::PhyScalar)::AlveolarChord
     # Verify the input values.
     if Lᵣ.u ≠ CENTIMETER
         msg = string("Argument Lᵣ must have units of CENTIMETER.")
@@ -511,9 +521,7 @@ function newAlveolarChord(Lᵣ, L₀::PhyScalar)::AlveolarChord
         msg = string("Argument L₀ must have units of CENTIMETER.")
         throw(ErrorException(msg))
     end
-    if L₀ < Lᵣ
-        L₀ = Lᵣ
-    end
+
     # Create the fibers comprising the chord.
     fᶜ = newCollagenFiber(Lᵣ, L₀)
     fᵉ = newElastinFiber(Lᵣ, L₀)
